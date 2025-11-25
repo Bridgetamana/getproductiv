@@ -6,17 +6,31 @@ const emptyState = document.getElementById("empty-state")
 const showQueueBtn = document.getElementById("show-queue")
 const overlay = document.querySelector(".overlay")
 const closeQueueBtn = document.querySelector(".close-queue-btn")
+const closeInfoBtn = document.getElementById("close-info-btn")
+const openInfoBtn = document.querySelector(".open-info-btn")
+const infoWrapper = document.querySelector(".info-wrapper")
+const addTimerBtn = document.querySelector(".add-timer-btn")
 loadTask()
 
-addTaskBtn.addEventListener("click", function () {
-    if (taskInput.value !== "") {
-        taskArray.push({ "status": "pending", "text": taskInput.value })
-        displayTask()
-        saveTask(taskArray)
-        taskInput.value = ""
-    } else {
-        alert("Add a task!")
+taskInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        if (taskInput.value !== "") {
+            taskArray.push({ "status": "pending", "text": taskInput.value })
+            displayTask()
+            saveTask(taskArray)
+            taskInput.value = ""
+        } else {
+            alert("Add a task!")
+        }
     }
+})
+
+taskInput.addEventListener("focus", () => {
+    addTimerBtn.style.display = "flex"
+})
+
+taskInput.addEventListener("blur", () => {
+    addTimerBtn.style.display = "none"
 })
 
 function displayTask() {
@@ -63,4 +77,16 @@ showQueueBtn.addEventListener("click", () => {
 
 closeQueueBtn.addEventListener("click", () => {
     overlay.style.display = "none"
+})
+
+openInfoBtn.addEventListener("click", () => {
+    infoWrapper.style.display = "flex"
+    closeInfoBtn.style.display = "flex"
+    openInfoBtn.style.display = "none"
+})
+
+closeInfoBtn.addEventListener("click", () => {
+    infoWrapper.style.display = "none"
+    closeInfoBtn.style.display = "none"
+    openInfoBtn.style.display = "flex"
 })
