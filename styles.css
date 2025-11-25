@@ -9,7 +9,7 @@
 
 :root {
   --accent: #197278;
-  --background: #f2f5f5;
+  --background: #fff;
   --text: #020808;
 }
 
@@ -50,6 +50,18 @@
     height: 1px;
     overflow: hidden;
   }
+
+  .hover {
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+    }
+  }
 }
 
 @layer component {
@@ -72,7 +84,7 @@
     margin-inline: auto;
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
     }
 
     @media (min-width: 1024px) {
@@ -85,11 +97,22 @@
     justify-content: center;
     align-items: center;
     gap: 6px;
-    background-color: #c1cacc;
+    background-color: #f1f6f7;
+    color: #353838;
+    border: 1px solid #f1f6f7;
     font-size: 0.85rem;
     padding: 8px;
     border-radius: 20px;
     cursor: pointer;
+
+    &:hover {
+      border: 1px solid #dde0e0;
+      background-color: #fff;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+    }
   }
 
   main {
@@ -144,6 +167,15 @@
     }
   }
 
+  .empty-state p {
+    margin-top: 0.5rem;
+    opacity: 0.7;
+  }
+
+  .empty-state h2 {
+    opacity: 0.9;
+  }
+
   .overlay {
     background-color: rgb(68 64 60 / 0.05);
     position: fixed;
@@ -172,6 +204,11 @@
 
       p {
         font-size: 1.5rem;
+      }
+
+      .close-queue-btn {
+        padding: 4px;
+        border-radius: 4px;
       }
     }
 

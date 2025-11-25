@@ -18,7 +18,12 @@
     <div class="container">
       <header>
         <h1>Getproductiv.</h1>
-        <button type="button" class="show-queue" id="show-queue">
+        <button
+          type="button"
+          class="show-queue"
+          id="show-queue"
+          aria-label="open queue"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -37,7 +42,7 @@
             <path d="M8 12L20 12" />
             <path d="M8 19L20 19" />
           </svg>
-          <p id="queue-num">1 next</p>
+          <p id="queued-tasks-count">1 next</p>
         </button>
       </header>
       <main class="flex">
@@ -45,7 +50,7 @@
           <div class="queue-wrapper">
             <div class="queue-top">
               <p>Queue</p>
-              <button class="hide-queue">
+              <button class="close-queue-btn hover">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -71,7 +76,7 @@
             <p>Focus on one thing. The rest will wait.</p>
           </div>
         </div>
-        <div class="no-task" id="no-task">
+        <div class="empty-state" id="empty-state">
           <img
             src="./assets/image/no-task-illustration.png"
             alt=""
@@ -80,8 +85,8 @@
           <h2>No task yet.</h2>
           <p>What do you want to work on?</p>
         </div>
-        <div class="filled-task" id="filled-task">
-          <ul id="task-list"></ul>
+        <div class="current-task-wrapper" id="current-task-wrapper">
+          <ul id="current-task"></ul>
         </div>
 
         <div class="input-group">
@@ -93,7 +98,7 @@
             placeholder="What do you want to focus on?"
           />
 
-          <button type="button" id="add-btn">
+          <button type="button" id="add-task-btn" class="hover">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -113,7 +118,7 @@
         </div>
       </main>
       <footer>
-        <button>
+        <button class="info-btn hover">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
