@@ -34,8 +34,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 3rem 1rem;
+    padding: 2rem 1rem;
     font-family: "OpenSans", sans-serif;
   }
 
@@ -56,10 +55,16 @@
 @layer component {
   .container {
     width: 100%;
+    min-height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   header,
   footer {
+    flex-shrink: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -85,11 +90,14 @@
   }
 
   main {
-    margin: 4rem auto;
+    flex: 1;
     width: 100%;
     max-width: 500px;
+    margin-inline: auto;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
   }
 
