@@ -63,6 +63,16 @@
     height: 1px;
     overflow: hidden;
   }
+
+  ::-moz-selection {
+    color: white;
+    background: var(--accent);
+  }
+
+  ::selection {
+    color: white;
+    background: var(--accent);
+  }
 }
 
 @layer utility {
