@@ -1,0 +1,32 @@
+@layer reset {
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    color: #222;
+    font-size: 1rem;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1rem;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  li {
+    list-style: none;
+  }
+}
+
+@layer component {
+  input, button {
+    font: inherit;
+    padding: 0.5em;
+  }
+}
+
