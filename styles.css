@@ -1,3 +1,18 @@
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400 600 700;
+  font-display: swap;
+  src: url("./assets/font/OpenSans-VariableFont_wdth\,wght.ttf")
+    format("truetype");
+}
+
+:root {
+  --accent: #197278;
+  --background: #f2f5f5;
+  --text: #020808;
+}
+
 @layer reset {
   * {
     padding: 0;
@@ -5,28 +20,116 @@
     box-sizing: border-box;
   }
 
+  button,
+  input {
+    font: inherit;
+    background-color: transparent;
+    border: 0;
+  }
+
   body {
-    color: #222;
+    background-color: var(--background);
+    color: var(--text);
     font-size: 1rem;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     padding: 3rem 1rem;
-  }
-
-  img {
-    max-width: 100%;
+    font-family: "OpenSans", sans-serif;
   }
 
   li {
     list-style: none;
   }
-}
 
-@layer component {
-  input, button {
-    font: inherit;
-    padding: 0.5em;
+  .sr-only {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 }
 
+@layer component {
+  .container {
+    width: 100%;
+  }
+
+  header,
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 900px;
+    margin-inline: auto;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+      max-width: 1200px;
+    }
+  }
+
+  .show-queue {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    background-color: #ece9e9;
+    padding: 8px;
+    border-radius: 20px;
+  }
+
+  main {
+    margin: 4rem auto;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ddf0f0;
+    padding: 8px 12px;
+    border-radius: 30px;
+    width: 100%;
+    margin-top: 4rem;
+
+    input {
+      width: 100%;
+      outline: 0;
+      padding-inline: 4px;
+    }
+
+    button {
+      background-color: var(--accent);
+      padding: 8px;
+      display: flex;
+      border-radius: 30px;
+    }
+  }
+
+  .task-item {
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      background: #000;
+      width: 60px;
+      height: 60px;
+      border-radius: 999px;
+      margin-top: 1rem;
+    }
+  }
+}
