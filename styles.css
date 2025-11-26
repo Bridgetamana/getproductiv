@@ -11,7 +11,7 @@
   --accent: #197278;
   --background: #FFFFFF;
   --text: #141414;
-  --text-muted: #ADADAD;
+  --text-muted: #3f3e3e;
   /* 707070 */
 
   --font-xs: 0.75rem;
@@ -73,6 +73,11 @@
   ::selection {
     color: white;
     background: var(--accent);
+  }
+
+  img {
+    display: block;
+    max-inline-size: 100%;
   }
 }
 
@@ -151,7 +156,7 @@
     justify-content: center;
     align-items: center;
     gap: 6px;
-    background-color: #f1f6f7;
+    background-color: #F0F0F0;
     color: var(--text-muted);
     border: 1px solid #f1f6f7;
     font-size: var(--font-sm);
