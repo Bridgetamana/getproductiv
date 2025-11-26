@@ -96,9 +96,11 @@
         </div>
         <div class="empty-state" id="empty-state">
           <img
-            src="./assets/image/no-task-illustration.png"
+            src="./assets/image/no-task-illustration.webp"
             alt=""
             width="200px"
+            height="200px"
+            fetchpriority="high"
           />
           <h2>No task yet.</h2>
           <p>What do you want to work on?</p>
@@ -173,7 +175,7 @@
       </main>
       <footer>
         <div class="footer-action-btns">
-          <button class="open-info-btn hover">
+          <button class="open-info-btn hover" aria-label="open info modal">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -191,7 +193,7 @@
               <path d="M12 8.01172V8.00172" />
             </svg>
           </button>
-          <button id="close-info-btn">
+          <button id="close-info-btn" aria-label="close info modal">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

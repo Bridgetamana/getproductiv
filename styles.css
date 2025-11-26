@@ -9,9 +9,10 @@
 
 :root {
   --accent: #197278;
-  --background: #fff;
-  --text: #020808;
-  --text-muted: #5a5f5f;
+  --background: #FFFFFF;
+  --text: #141414;
+  --text-muted: #ADADAD;
+  /* 707070 */
 
   --font-xs: 0.75rem;
   --font-sm: 0.875rem;
@@ -172,7 +173,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #ddf0f0;
+    background: #F0F0F0; 
+    /* 141414 */
     padding: 8px 12px;
     border-radius: 30px;
     width: 100%;
