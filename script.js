@@ -1,6 +1,6 @@
 let taskArray = [];
 const taskInput = document.getElementById("task")
-const addTaskBtn = document.getElementById("add-task-btn")
+const addTaskBtn = document.querySelector(".add-task-btn")
 const currentTask = document.getElementById("current-task")
 const emptyState = document.getElementById("empty-state")
 const showQueueBtn = document.getElementById("show-queue")
@@ -12,35 +12,48 @@ const infoWrapper = document.querySelector(".info-wrapper")
 const addTimerBtn = document.querySelector(".add-timer-btn")
 loadTask()
 
-taskInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-        if (taskInput.value !== "") {
-            taskArray.push({ "status": "pending", "text": taskInput.value })
-            displayTask()
-            saveTask(taskArray)
-            taskInput.value = ""
-        } else {
-            alert("Add a task!")
-        }
+function addTask() {
+    if (taskInput.value === "") {
+        alert("Add a task!")
+        return
     }
+    taskArray.push({ "status": "pending", "text": taskInput.value })
+    displayTask()
+    saveTask(taskArray)
+    taskInput.value = ""
+}
+
+function toggleDisplay(element, show) {
+    element.style.display = show ? "block" : "none"
+}
+
+taskInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") addTask()
+})
+
+addTaskBtn.addEventListener("mousedown", (e) => e.preventDefault())
+
+addTaskBtn.addEventListener("click", () => {
+    addTask()
+    taskInput.blur()
 })
 
 taskInput.addEventListener("focus", () => {
-    addTimerBtn.style.display = "flex"
+    addTaskBtn.style.opacity = 1
 })
 
 taskInput.addEventListener("blur", () => {
-    addTimerBtn.style.display = "none"
+    addTaskBtn.style.opacity = 0
 })
 
 function displayTask() {
     if (taskArray.length === 0) {
-        emptyState.style.display = "block"
+        toggleDisplay(emptyState, true)
         currentTask.innerHTML = ""
         return
     }
 
-    emptyState.style.display = "none"
+    toggleDisplay(emptyState, false)
 
     const li = document.createElement("li")
     li.classList.add("task-item")
@@ -71,22 +84,17 @@ function loadTask() {
     displayTask()
 }
 
-showQueueBtn.addEventListener("click", () => {
-    overlay.style.display = "flex"
-})
-
-closeQueueBtn.addEventListener("click", () => {
-    overlay.style.display = "none"
-})
+showQueueBtn.addEventListener("click", () => toggleDisplay(overlay, true))
+closeQueueBtn.addEventListener("click", () => toggleDisplay(overlay, false))
 
 openInfoBtn.addEventListener("click", () => {
-    infoWrapper.style.display = "flex"
-    closeInfoBtn.style.display = "flex"
-    openInfoBtn.style.display = "none"
+    toggleDisplay(infoWrapper, true)
+    toggleDisplay(closeInfoBtn, true)
+    toggleDisplay(openInfoBtn, false)
 })
 
 closeInfoBtn.addEventListener("click", () => {
-    infoWrapper.style.display = "none"
-    closeInfoBtn.style.display = "none"
-    openInfoBtn.style.display = "flex"
+    toggleDisplay(infoWrapper, false)
+    toggleDisplay(closeInfoBtn, false)
+    toggleDisplay(openInfoBtn, true)
 })

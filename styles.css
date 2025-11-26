@@ -192,7 +192,7 @@
       color: var(--text);
 
       &::placeholder {
-        color: var(--text-muted);
+        color: #c0bebe;
       }
     }
 
@@ -231,7 +231,6 @@
     }
 
     p {
-      margin-top: 0.5rem;
       font-size: var(--font-base);
       color: var(--text-muted);
     }
@@ -246,6 +245,7 @@
     position: fixed;
     width: 100%;
     height: 100vh;
+    inset: 0;
     backdrop-filter: blur(4px);
     display: none;
     z-index: 10;
@@ -333,6 +333,7 @@
   font-size: var(--font-sm);
 }
 
-.add-timer-btn {
-  display: none;
+.add-task-btn {
+ opacity: 0;
+  background-color: var(--accent);
 }
