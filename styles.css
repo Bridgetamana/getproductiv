@@ -52,6 +52,7 @@
     padding: var(--spacing-xl) var(--spacing-md);
     font-family: "OpenSans", -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
+    min-height: -webkit-fill-available;
   }
 
   li {
@@ -80,6 +81,10 @@
   img {
     display: block;
     max-inline-size: 100%;
+  }
+
+  html {
+  height: -webkit-fill-available;
   }
 }
 
