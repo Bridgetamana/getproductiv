@@ -46,7 +46,7 @@
     color: var(--text);
     font-size: var(--font-base);
     line-height: 1.5;
-    height: 100dvh;
+    height: 100svh;
     display: flex;
     flex-direction: column;
     padding: var(--spacing-xl) var(--spacing-md);
