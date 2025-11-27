@@ -3,6 +3,7 @@ const taskInput = document.getElementById("task")
 const addTaskBtn = document.querySelector(".add-task-btn")
 const currentTask = document.getElementById("current-task")
 const emptyState = document.getElementById("empty-state")
+const currentTaskWrapper = document.getElementById("current-task-wrapper")
 const showQueueBtn = document.getElementById("show-queue")
 const overlay = document.querySelector(".overlay")
 const closeQueueBtn = document.querySelector(".close-queue-btn")
@@ -48,12 +49,14 @@ taskInput.addEventListener("blur", () => {
 
 function displayTask() {
     if (taskArray.length === 0) {
-        toggleDisplay(emptyState, true)
+        emptyState.classList.add("visible")
+        currentTaskWrapper.classList.remove("visible")
         currentTask.innerHTML = ""
         return
     }
 
-    toggleDisplay(emptyState, false)
+    emptyState.classList.remove("visible")
+    currentTaskWrapper.classList.add("visible")
 
     const li = document.createElement("li")
     li.classList.add("task-item")

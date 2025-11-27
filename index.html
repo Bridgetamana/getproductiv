@@ -94,19 +94,21 @@
             <p class="queue-footer">Focus on one thing. The rest will wait.</p>
           </div>
         </div>
-        <div class="empty-state" id="empty-state">
-          <img
-            src="./assets/image/no-task-illustration.webp"
-            alt=""
-            width="200px"
-            height="197px"
-            fetchpriority="high"
-          />
-          <h2>No task yet.</h2>
-          <p>Click the input to add a task</p>
-        </div>
-        <div class="current-task-wrapper" id="current-task-wrapper">
-          <ul id="current-task"></ul>
+        <div class="task-display-area">
+          <div class="empty-state visible" id="empty-state">
+            <img
+              src="./assets/image/no-task-illustration.webp"
+              alt=""
+              width="200px"
+              height="197px"
+              fetchpriority="high"
+            />
+            <h2>No task yet.</h2>
+            <p>Click the input to add a task</p>
+          </div>
+          <div class="current-task-wrapper" id="current-task-wrapper">
+            <ul id="current-task"></ul>
+          </div>
         </div>
 
         <div class="input-group">
@@ -133,7 +135,12 @@
             id="task"
             placeholder="What do you want to focus on?"
           />
-          <button type="button" class="add-task-btn" class="hover">
+          <button
+            type="button"
+            class="add-task-btn"
+            class="hover"
+            aria-label="Add Task"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
