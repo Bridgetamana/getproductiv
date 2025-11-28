@@ -91,12 +91,10 @@
                 </svg>
               </button>
             </div>
-            <ul class="queue-list-wrapper">
-              <li>
-                <input type="checkbox" name="queue-list" id="queue-item" />
-                <label for="queue-list">task 1</label>
-              </li>
-            </ul>
+            <div class="empty-queue-state">
+              <p id="no-queued-task">No task is queued</p>
+              <ul class="queue-list-wrapper"></ul>
+            </div>
             <p class="queue-footer">Focus on one thing. The rest will wait.</p>
           </div>
         </div>
@@ -217,7 +215,12 @@
                   one.
                 </p>
                 <p>Don’t worry, your task is safely tucked in the queue.</p>
-                <p>Built with ❤️ by <a href="#">Bridgetamana</a></p>
+                <p>
+                  Built with ❤️ by
+                  <a href="https://github.com/Bridgetamana" target="_blank"
+                    >Bridgetamana</a
+                  >
+                </p>
               </div>
             </div>
           </div>

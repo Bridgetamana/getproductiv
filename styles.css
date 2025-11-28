@@ -320,6 +320,7 @@
     right: 0;
     top: 0;
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.06);
+    animation: slideIn 150ms ease-in;
 
     .queue-top {
       display: flex;
@@ -339,8 +340,11 @@
       }
     }
 
-    .queue-list-wrapper {
+    .empty-queue-state {
       flex: 1;
+    }
+
+    .queue-list-wrapper {
       margin-top: 2rem;
 
       li {
@@ -358,6 +362,15 @@
     border-top: 1px solid var(--border-color);
     padding-top: var(--spacing-sm);
     font-style: italic;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(1000px);
+  }
+  to {
+    transform: translateX(0);
   }
 }
 

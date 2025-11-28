@@ -11,6 +11,9 @@ const closeInfoBtn = document.getElementById("close-info-btn")
 const openInfoBtn = document.querySelector(".open-info-btn")
 const infoWrapper = document.querySelector(".info-wrapper")
 const addTimerBtn = document.querySelector(".add-timer-btn")
+const queueListWrapper = document.querySelector(".queue-list-wrapper")
+const noQueuedTask = document.getElementById("no-queued-task")
+const queueWrapper = document.querySelector(".queue-wrapper")
 loadTask()
 
 function addTask() {
@@ -75,6 +78,18 @@ function displayTask() {
         displayTask()
         saveTask(taskArray)
     })
+
+    let queueList = ""
+    taskArray.forEach(task => {
+        queueList += `
+                <li>
+                    <input type="checkbox" name="queue-list" id="queue-item" />
+                    <label for="queue-list">${task.text}</label>
+                </li>
+            `
+    });
+    noQueuedTask.style.display = "none"
+    queueListWrapper.innerHTML = queueList;
 }
 
 function saveTask(task) {
