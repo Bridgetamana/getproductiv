@@ -46,12 +46,13 @@
     color: var(--text);
     font-size: var(--font-base);
     line-height: 1.5;
-    min-height: 100vh;
+    height: 100svh;
     display: flex;
     flex-direction: column;
     padding: var(--spacing-xl) var(--spacing-md);
     font-family: "OpenSans", -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
+    height: -webkit-fill-available;
   }
 
   li {
@@ -81,6 +82,10 @@
     display: block;
     max-inline-size: 100%;
   }
+
+  html {
+  height: -webkit-fill-available;
+  }
 }
 
 @layer utility {
@@ -101,7 +106,6 @@
 @layer layout {
   .container {
     width: 100%;
-    min-height: 100%;
     flex: 1;
     display: flex;
     flex-direction: column;
