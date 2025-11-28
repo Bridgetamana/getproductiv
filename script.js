@@ -10,12 +10,20 @@ const closeQueueBtn = document.querySelector(".close-queue-btn")
 const closeInfoBtn = document.getElementById("close-info-btn")
 const openInfoBtn = document.querySelector(".open-info-btn")
 const infoWrapper = document.querySelector(".info-wrapper")
-const addTimerBtn = document.querySelector(".add-timer-btn")
 const queueListWrapper = document.querySelector(".queue-list-wrapper")
 const noQueuedTask = document.getElementById("no-queued-task")
 const queueWrapper = document.querySelector(".queue-wrapper")
 const queuedTasksCount = document.getElementById("queued-tasks-count")
+const toast = document.getElementById("toast")
 loadTask()
+
+function showToast(message) {
+    toast.textContent = message
+    toast.classList.add("visible")
+    setTimeout(() => {
+        toast.classList.remove("visible")
+    }, 2500)
+}
 
 function updateQueueCount() {
     const queueCount = taskArray.length > 1 ? taskArray.length - 1 : 0
@@ -29,11 +37,12 @@ function updateQueueCount() {
 }
 
 function addTask() {
-    if (taskInput.value === "") {
-        alert("Add a task!")
+    if (taskInput.value.trim() === "") {
+        showToast("Please enter a task")
+        taskInput.focus()
         return
     }
-    taskArray.push({ "status": "pending", "text": taskInput.value })
+    taskArray.push({ "status": "pending", "text": taskInput.value.trim() })
     displayTask()
     saveTask(taskArray)
     taskInput.value = ""
@@ -141,4 +150,63 @@ closeInfoBtn.addEventListener("click", () => {
     infoWrapper.classList.remove("visible")
     closeInfoBtn.style.display = "none"
     openInfoBtn.style.display = "block"
+})
+
+function completeCurrentTask() {
+    if (taskArray.length > 0) {
+        taskArray.shift()
+        displayTask()
+        saveTask(taskArray)
+    }
+}
+
+document.addEventListener("keydown", (e) => {
+    if (document.activeElement === taskInput) {
+        return
+    }
+
+    if (e.key === "Escape") {
+        if (overlay.classList.contains("visible")) {
+            overlay.classList.remove("visible")
+        }
+        if (infoWrapper.classList.contains("visible")) {
+            infoWrapper.classList.remove("visible")
+            closeInfoBtn.style.display = "none"
+            openInfoBtn.style.display = "block"
+        }
+    }
+
+    // Q - Toggle queue
+    if (e.key === "q" || e.key === "Q") {
+        if (overlay.classList.contains("visible")) {
+            overlay.classList.remove("visible")
+        } else {
+            overlay.classList.add("visible")
+        }
+    }
+
+    // Space - Complete current task
+    if (e.key === " " || e.code === "Space") {
+        e.preventDefault()
+        completeCurrentTask()
+    }
+
+    // N - Focus on new task input
+    if (e.key === "n" || e.key === "N") {
+        e.preventDefault()
+        taskInput.focus()
+    }
+
+    // ? - Toggle info/help
+    if (e.key === "?") {
+        if (infoWrapper.classList.contains("visible")) {
+            infoWrapper.classList.remove("visible")
+            closeInfoBtn.style.display = "none"
+            openInfoBtn.style.display = "block"
+        } else {
+            infoWrapper.classList.add("visible")
+            closeInfoBtn.style.display = "block"
+            openInfoBtn.style.display = "none"
+        }
+    }
 })
