@@ -15,6 +15,21 @@ const noQueuedTask = document.getElementById("no-queued-task")
 const queueWrapper = document.querySelector(".queue-wrapper")
 const queuedTasksCount = document.getElementById("queued-tasks-count")
 const toast = document.getElementById("toast")
+
+// Audio context for mobile compatibility - created once and reused
+let audioContext = null
+
+function getAudioContext() {
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)()
+    }
+    // Resume if suspended (required for mobile browsers)
+    if (audioContext.state === 'suspended') {
+        audioContext.resume()
+    }
+    return audioContext
+}
+
 loadTask()
 
 function showToast(message) {
@@ -23,6 +38,16 @@ function showToast(message) {
     setTimeout(() => {
         toast.classList.remove("visible")
     }, 2500)
+}
+
+function deleteQueuedTask(index) {
+    const actualIndex = index + 1
+    if (actualIndex > 0 && actualIndex < taskArray.length) {
+        taskArray.splice(actualIndex, 1)
+        displayTask()
+        saveTask(taskArray)
+        showToast("Task removed")
+    }
 }
 
 function updateQueueCount() {
@@ -117,10 +142,22 @@ function displayTask() {
                 <li>
                     <span>${index + 1}.</span>
                     <label>${task.text}</label>
+                    <button class="delete-queued-task hover" data-index="${index}" aria-label="Delete task">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6L6 18M6 6l12 12"/>
+                        </svg>
+                    </button>
                 </li>
             `
         })
         queueListWrapper.innerHTML = queueList
+
+        queueListWrapper.querySelectorAll(".delete-queued-task").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const index = parseInt(this.dataset.index)
+                deleteQueuedTask(index)
+            })
+        })
     }
 }
 
