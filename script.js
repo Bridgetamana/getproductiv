@@ -169,6 +169,24 @@ function loadTask() {
     const storedTask = JSON.parse(localStorage.getItem("Tasks")) || []
     taskArray = storedTask
     displayTask()
+    handleShortcutAction()
+}
+
+function handleShortcutAction() {
+    const urlParams = new URLSearchParams(window.location.search)
+    const action = urlParams.get('action')
+
+    if (action === 'new-task') {
+        setTimeout(() => {
+            taskInput.focus()
+        }, 100)
+        window.history.replaceState({}, document.title, window.location.pathname)
+    } else if (action === 'view-queue') {
+        setTimeout(() => {
+            overlay.classList.add("visible")
+        }, 100)
+        window.history.replaceState({}, document.title, window.location.pathname)
+    }
 }
 
 showQueueBtn.addEventListener("click", () => overlay.classList.add("visible"))
