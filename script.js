@@ -276,9 +276,78 @@ function isPipSupported() {
     return "documentPictureInPicture" in window
 }
 
-if (!isPipSupported()) {
-    pipBtn.classList.add("hidden")
+function isMobile() {
+    return window.matchMedia("(hover: none) and (pointer: coarse)").matches
 }
+
+const focusMode = document.getElementById("focus-mode")
+const focusTask = document.getElementById("focus-task")
+const focusQueue = document.getElementById("focus-queue")
+const focusCompleteBtn = document.getElementById("focus-complete-btn")
+const focusCloseBtn = document.getElementById("focus-close-btn")
+let wakeLock = null
+
+async function requestWakeLock() {
+    if ("wakeLock" in navigator) {
+        try {
+            wakeLock = await navigator.wakeLock.request("screen")
+        } catch (e) {
+            // Wake lock failed, continue without it
+        }
+    }
+}
+
+function releaseWakeLock() {
+    if (wakeLock) {
+        wakeLock.release()
+        wakeLock = null
+    }
+}
+
+function openFocusMode() {
+    const taskText = getCurrentTaskText()
+    if (!taskText) {
+        showToast("Add a task first")
+        return
+    }
+
+    focusTask.textContent = taskText
+    focusQueue.textContent = getQueueStatus()
+    focusMode.classList.add("visible")
+    requestWakeLock()
+}
+
+function closeFocusMode() {
+    focusMode.classList.remove("visible")
+    releaseWakeLock()
+}
+
+function updateFocusMode() {
+    if (!focusMode.classList.contains("visible")) return
+
+    const taskText = getCurrentTaskText()
+    if (!taskText) {
+        closeFocusMode()
+        showToast("All tasks complete!")
+        return
+    }
+
+    focusTask.textContent = taskText
+    focusQueue.textContent = getQueueStatus()
+}
+
+focusCompleteBtn.addEventListener("click", () => {
+    completeCurrentTask()
+    updateFocusMode()
+})
+
+focusCloseBtn.addEventListener("click", closeFocusMode)
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && focusMode.classList.contains("visible")) {
+        requestWakeLock()
+    }
+})
 
 function getCurrentTaskText() {
     if (taskArray.length === 0) {
@@ -466,7 +535,15 @@ function playCompletionSound() {
     }
 }
 
-pipBtn.addEventListener("click", openPip)
+pipBtn.addEventListener("click", () => {
+    if (isMobile()) {
+        openFocusMode()
+    } else if (isPipSupported()) {
+        openPip()
+    } else {
+        openFocusMode()
+    }
+})
 
 document.addEventListener("click", () => {
     if (Notification.permission === "default") {
