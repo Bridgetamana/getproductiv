@@ -61,11 +61,11 @@
     font-size: var(--font-base);
     line-height: 1.5;
     height: 100vh;
-    height: 100dvh;
     height: -webkit-fill-available;
+    height: 100dvh;
     min-height: 100vh;
-    min-height: 100dvh;
     min-height: -webkit-fill-available;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     padding: var(--spacing-xl) var(--spacing-md);
@@ -102,8 +102,8 @@
   }
 
   html {
-    height: 100%;
     height: -webkit-fill-available;
+    height: 100%;
   }
 }
 
@@ -331,6 +331,7 @@
     height: 100vh;
     height: 100dvh;
     inset: 0;
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     opacity: 0;
     visibility: hidden;
@@ -595,4 +596,110 @@ kbd {
   background-color: var(--background-main);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
+}
+
+.focus-timer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.timer-display {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.timer-input {
+  width: 2.5ch;
+  padding: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-family: inherit;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  transition: all 0.2s ease;
+}
+
+.timer-input::-webkit-outer-spin-button,
+.timer-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.timer-input:focus {
+  outline: none;
+  color: var(--text);
+  border-bottom-color: var(--accent-color);
+}
+
+.timer-input:hover:not(:focus) {
+  border-bottom-color: var(--border-color);
+}
+
+.timer-separator {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 -2px;
+}
+
+.timer-display.running .timer-input,
+.timer-display.running .timer-separator {
+  color: var(--accent-color);
+}
+
+.timer-display.running .timer-input {
+  pointer-events: none;
+  border-bottom-color: transparent;
+}
+
+.timer-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.timer-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background-color: var(--accent-color);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.timer-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.timer-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.timer-btn-secondary {
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.timer-btn-secondary:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
 }

@@ -82,7 +82,11 @@
         <div class="queue-wrapper">
           <div class="queue-top">
             <p>Queue</p>
-            <button class="close-queue-btn hover">
+            <button
+              class="close-queue-btn hover"
+              type="button"
+              aria-label="close queue"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -120,6 +124,102 @@
         </div>
         <div class="current-task-wrapper" id="current-task-wrapper">
           <ul id="current-task"></ul>
+        </div>
+
+        <div class="focus-timer" id="focus-timer">
+          <div class="timer-display" id="timer-display">
+            <input
+              type="number"
+              id="timer-minutes"
+              class="timer-input"
+              value="25"
+              min="0"
+              max="99"
+              aria-label="Minutes"
+            />
+            <span class="timer-separator">:</span>
+            <input
+              type="number"
+              id="timer-seconds"
+              class="timer-input"
+              value="00"
+              min="0"
+              max="59"
+              aria-label="Seconds"
+            />
+          </div>
+          <div class="timer-controls">
+            <button
+              type="button"
+              class="timer-btn"
+              id="timer-start"
+              aria-label="Start timer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                color="currentColor"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M18.8906 12.846C18.5371 14.189 16.8667 15.138 13.5257 17.0361C10.296 18.8709 8.6812 19.7884 7.37983 19.4196C6.8418 19.2671 6.35159 18.9776 5.95624 18.5787C5 17.6139 5 15.7426 5 12C5 8.2574 5 6.3861 5.95624 5.42132C6.35159 5.02245 6.8418 4.73288 7.37983 4.58042C8.6812 4.21165 10.296 5.12907 13.5257 6.96393C16.8667 8.86197 18.5371 9.811 18.8906 11.154C19.0365 11.7084 19.0365 12.2916 18.8906 12.846Z"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="timer-btn"
+              id="timer-pause"
+              aria-label="Pause timer"
+              style="display: none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                color="currentColor"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M4 7C4 5.58579 4 4.87868 4.43934 4.43934C4.87868 4 5.58579 4 7 4C8.41421 4 9.12132 4 9.56066 4.43934C10 4.87868 10 5.58579 10 7V17C10 18.4142 10 19.1213 9.56066 19.5607C9.12132 20 8.41421 20 7 20C5.58579 20 4.87868 20 4.43934 19.5607C4 19.1213 4 18.4142 4 17V7Z"
+                />
+                <path
+                  d="M14 7C14 5.58579 14 4.87868 14.4393 4.43934C14.8787 4 15.5858 4 17 4C18.4142 4 19.1213 4 19.5607 4.43934C20 4.87868 20 5.58579 20 7V17C20 18.4142 20 19.1213 19.5607 19.5607C19.1213 20 18.4142 20 17 20C15.5858 20 14.8787 20 14.4393 19.5607C14 19.1213 14 18.4142 14 17V7Z"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="timer-btn timer-btn-secondary"
+              id="timer-reset"
+              aria-label="Reset timer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                color="currentColor"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75334 21.5 2.5 17.2467 2.5 12C2.5 6.75329 6.75334 2.5 12 2.5C15.8956 2.5 19.2436 4.84478 20.7095 8.2M21.5 5.5L21.025 8.675L18 8"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -224,13 +324,17 @@
                   <li><kbd>N</kbd> New task</li>
                   <li><kbd>Space</kbd> Complete task</li>
                   <li><kbd>Q</kbd> Toggle queue</li>
+                  <li><kbd>P</kbd> Start/pause timer</li>
                   <li><kbd>?</kbd> Toggle help</li>
                   <li><kbd>Esc</kbd> Close modal</li>
                 </ul>
               </div>
               <p>
                 Built with ❤️ by
-                <a href="https://github.com/Bridgetamana" target="_blank"
+                <a
+                  href="https://github.com/Bridgetamana"
+                  target="_blank"
+                  rel="noopener"
                   >Bridgetamana</a
                 >
               </p>

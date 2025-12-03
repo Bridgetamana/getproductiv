@@ -15,6 +15,17 @@ const noQueuedTask = document.getElementById("no-queued-task")
 const queueWrapper = document.querySelector(".queue-wrapper")
 const queuedTasksCount = document.getElementById("queued-tasks-count")
 const toast = document.getElementById("toast")
+const timerDisplay = document.getElementById("timer-display")
+const timerMinutesInput = document.getElementById("timer-minutes")
+const timerSecondsInput = document.getElementById("timer-seconds")
+const timerStartBtn = document.getElementById("timer-start")
+const timerPauseBtn = document.getElementById("timer-pause")
+const timerResetBtn = document.getElementById("timer-reset")
+let timerInterval = null
+let timerRunning = false
+let timerSecondsLeft = 25 * 60
+let savedMinutes = 25
+let savedSeconds = 0
 
 // Audio context for mobile compatibility - created once and reused
 let audioContext = null
@@ -264,4 +275,147 @@ document.addEventListener("keydown", (e) => {
             openInfoBtn.style.display = "none"
         }
     }
+
+    // P - Toggle timer (start/pause)
+    if (e.key === "p" || e.key === "P") {
+        e.preventDefault()
+        toggleTimer()
+    }
 })
+
+function getTimerValues() {
+    const mins = parseInt(timerMinutesInput.value) || 0
+    const secs = parseInt(timerSecondsInput.value) || 0
+    return { mins, secs }
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timerSecondsLeft / 60)
+    const seconds = timerSecondsLeft % 60
+    timerMinutesInput.value = minutes.toString().padStart(2, "0")
+    timerSecondsInput.value = seconds.toString().padStart(2, "0")
+    if (timerRunning) {
+        document.title = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} - Getproductiv`
+    }
+}
+
+function startTimer() {
+    if (timerRunning) return
+    const { mins, secs } = getTimerValues()
+    savedMinutes = mins
+    savedSeconds = secs
+    timerSecondsLeft = (mins * 60) + secs
+
+    if (timerSecondsLeft <= 0) {
+        showToast("Set a time first")
+        return
+    }
+
+    timerRunning = true
+    timerStartBtn.style.display = "none"
+    timerPauseBtn.style.display = "flex"
+    timerDisplay.classList.add("running")
+
+    timerInterval = setInterval(() => {
+        timerSecondsLeft--
+        updateTimerDisplay()
+
+        if (timerSecondsLeft <= 0) {
+            timerComplete()
+        }
+    }, 1000)
+}
+
+function pauseTimer() {
+    timerRunning = false
+    timerStartBtn.style.display = "flex"
+    timerPauseBtn.style.display = "none"
+    timerDisplay.classList.remove("running")
+
+    if (timerInterval) {
+        clearInterval(timerInterval)
+        timerInterval = null
+    }
+
+    document.title = "Getproductiv - Focus on one task at a time"
+}
+
+function resetTimer() {
+    pauseTimer()
+    timerSecondsLeft = (savedMinutes * 60) + savedSeconds
+    updateTimerDisplay()
+}
+
+function toggleTimer() {
+    if (timerRunning) {
+        pauseTimer()
+    } else {
+        startTimer()
+    }
+}
+
+function timerComplete() {
+    pauseTimer()
+    playTimerSound()
+    if (Notification.permission === "granted") {
+        new Notification("Getproductiv", {
+            body: "Time's up!",
+            icon: "./assets/icons/android-chrome-192x192.png"
+        })
+    }
+
+    showToast("Time's up!")
+}
+
+function playTimerSound() {
+    try {
+        const ctx = getAudioContext()
+        const frequencies = [523.25, 659.25, 783.99, 1046.50]
+        frequencies.forEach((freq, i) => {
+            const oscillator = ctx.createOscillator()
+            const gainNode = ctx.createGain()
+
+            oscillator.connect(gainNode)
+            gainNode.connect(ctx.destination)
+
+            oscillator.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.15)
+            oscillator.type = "sine"
+
+            gainNode.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.15)
+            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.15 + 0.5)
+
+            oscillator.start(ctx.currentTime + i * 0.15)
+            oscillator.stop(ctx.currentTime + i * 0.15 + 0.5)
+        })
+    } catch (e) {
+        console.log("Audio not available:", e)
+    }
+}
+
+timerStartBtn.addEventListener("click", startTimer)
+timerPauseBtn.addEventListener("click", pauseTimer)
+timerResetBtn.addEventListener("click", resetTimer)
+
+timerMinutesInput.addEventListener("change", () => {
+    let val = parseInt(timerMinutesInput.value) || 0
+    val = Math.max(0, Math.min(99, val))
+    timerMinutesInput.value = val.toString().padStart(2, "0")
+    timerSecondsLeft = (val * 60) + (parseInt(timerSecondsInput.value) || 0)
+})
+
+timerSecondsInput.addEventListener("change", () => {
+    let val = parseInt(timerSecondsInput.value) || 0
+    val = Math.max(0, Math.min(59, val))
+    timerSecondsInput.value = val.toString().padStart(2, "0")
+    timerSecondsLeft = ((parseInt(timerMinutesInput.value) || 0) * 60) + val
+})
+
+timerMinutesInput.addEventListener("focus", () => timerMinutesInput.select())
+timerSecondsInput.addEventListener("focus", () => timerSecondsInput.select())
+
+document.addEventListener("click", () => {
+    if (Notification.permission === "default") {
+        Notification.requestPermission()
+    }
+}, { once: true })
+updateTimerDisplay()
