@@ -12,7 +12,6 @@ const openInfoBtn = document.querySelector(".open-info-btn")
 const infoWrapper = document.querySelector(".info-wrapper")
 const queueListWrapper = document.querySelector(".queue-list-wrapper")
 const noQueuedTask = document.getElementById("no-queued-task")
-const queueWrapper = document.querySelector(".queue-wrapper")
 const queuedTasksCount = document.getElementById("queued-tasks-count")
 const toast = document.getElementById("toast")
 const pipBtn = document.getElementById("pip-btn")
@@ -59,10 +58,6 @@ function addTask() {
     displayTask()
     saveTask(taskArray)
     taskInput.value = ""
-}
-
-function toggleDisplay(element, show) {
-    element.style.display = show ? "block" : "none"
 }
 
 taskInput.addEventListener("keypress", (e) => {
@@ -422,13 +417,6 @@ function escapeHtml(text) {
     const div = document.createElement("div")
     div.textContent = text
     return div.innerHTML
-}
-
-function closePip() {
-    if (pipWindow) {
-        pipWindow.close()
-        pipWindow = null
-    }
 }
 
 pipBtn.addEventListener("click", openPip)

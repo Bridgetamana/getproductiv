@@ -13,7 +13,7 @@ Add your tasks, and Getproductiv shows you only **one task at a time**. Complete
 - **Delete tasks** — Remove any queued task you no longer need
 - **Keyboard shortcuts** — Work faster without touching your mouse
 - **Mini window (PiP)** — Pop out your current task to a floating window (desktop Chrome)
-- **PWA** — Install on mobile or desktop, works offline
+- **PWA** — Install on mobile or desktop
 
 ## Keyboard Shortcuts
 
