@@ -18,18 +18,6 @@ const toast = document.getElementById("toast")
 const pipBtn = document.getElementById("pip-btn")
 let pipWindow = null
 
-let audioContext = null
-
-function getAudioContext() {
-    if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)()
-    }
-    if (audioContext.state === 'suspended') {
-        audioContext.resume()
-    }
-    return audioContext
-}
-
 loadTask()
 
 function showToast(message) {
@@ -127,7 +115,6 @@ function displayTask() {
         taskArray.shift()
         displayTask()
         saveTask(taskArray)
-        playCompletionSound()
     })
 
     const queuedTasks = taskArray.slice(1)
@@ -217,7 +204,6 @@ function completeCurrentTask() {
         taskArray.shift()
         displayTask()
         saveTask(taskArray)
-        playCompletionSound()
     }
 }
 
@@ -276,78 +262,9 @@ function isPipSupported() {
     return "documentPictureInPicture" in window
 }
 
-function isMobile() {
-    return window.matchMedia("(hover: none) and (pointer: coarse)").matches
+if (!isPipSupported()) {
+    pipBtn.classList.add("hidden")
 }
-
-const focusMode = document.getElementById("focus-mode")
-const focusTask = document.getElementById("focus-task")
-const focusQueue = document.getElementById("focus-queue")
-const focusCompleteBtn = document.getElementById("focus-complete-btn")
-const focusCloseBtn = document.getElementById("focus-close-btn")
-let wakeLock = null
-
-async function requestWakeLock() {
-    if ("wakeLock" in navigator) {
-        try {
-            wakeLock = await navigator.wakeLock.request("screen")
-        } catch (e) {
-            // Wake lock failed, continue without it
-        }
-    }
-}
-
-function releaseWakeLock() {
-    if (wakeLock) {
-        wakeLock.release()
-        wakeLock = null
-    }
-}
-
-function openFocusMode() {
-    const taskText = getCurrentTaskText()
-    if (!taskText) {
-        showToast("Add a task first")
-        return
-    }
-
-    focusTask.textContent = taskText
-    focusQueue.textContent = getQueueStatus()
-    focusMode.classList.add("visible")
-    requestWakeLock()
-}
-
-function closeFocusMode() {
-    focusMode.classList.remove("visible")
-    releaseWakeLock()
-}
-
-function updateFocusMode() {
-    if (!focusMode.classList.contains("visible")) return
-
-    const taskText = getCurrentTaskText()
-    if (!taskText) {
-        closeFocusMode()
-        showToast("All tasks complete!")
-        return
-    }
-
-    focusTask.textContent = taskText
-    focusQueue.textContent = getQueueStatus()
-}
-
-focusCompleteBtn.addEventListener("click", () => {
-    completeCurrentTask()
-    updateFocusMode()
-})
-
-focusCloseBtn.addEventListener("click", closeFocusMode)
-
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible" && focusMode.classList.contains("visible")) {
-        requestWakeLock()
-    }
-})
 
 function getCurrentTaskText() {
     if (taskArray.length === 0) {
@@ -514,39 +431,4 @@ function closePip() {
     }
 }
 
-function playCompletionSound() {
-    try {
-        const ctx = getAudioContext()
-        const oscillator = ctx.createOscillator()
-        const gainNode = ctx.createGain()
-
-        oscillator.connect(gainNode)
-        gainNode.connect(ctx.destination)
-
-        oscillator.frequency.setValueAtTime(880, ctx.currentTime)
-        oscillator.type = "sine"
-
-        gainNode.gain.setValueAtTime(0.3, ctx.currentTime)
-        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3)
-
-        oscillator.start(ctx.currentTime)
-        oscillator.stop(ctx.currentTime + 0.3)
-    } catch (e) {
-    }
-}
-
-pipBtn.addEventListener("click", () => {
-    if (isMobile()) {
-        openFocusMode()
-    } else if (isPipSupported()) {
-        openPip()
-    } else {
-        openFocusMode()
-    }
-})
-
-document.addEventListener("click", () => {
-    if (Notification.permission === "default") {
-        Notification.requestPermission()
-    }
-}, { once: true })
+pipBtn.addEventListener("click", openPip)
