@@ -114,7 +114,7 @@ function displayTask() {
     const li = document.createElement("li")
     li.classList.add("task-item")
     li.innerHTML = `
-        <label>${taskArray[0].text}</label>
+        <label>${escapeHtml(taskArray[0].text)}</label>
         <button class="complete-task-btn hover"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#dfd7d7ff" fill="none" stroke="#dfd7d7ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 14.5C5 14.5 6.5 14.5 8.5 18C8.5 18 14.0588 8.83333 19 7" />
         </svg></button>
@@ -142,7 +142,7 @@ function displayTask() {
             queueList += `
                 <li>
                     <span>${index + 1}.</span>
-                    <label>${task.text}</label>
+                    <label>${escapeHtml(task.text)}</label>
                     <button class="delete-queued-task hover" data-index="${index}" aria-label="Delete task">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 6L6 18M6 6l12 12"/>

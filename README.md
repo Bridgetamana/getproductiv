@@ -12,6 +12,7 @@ Add your tasks, and Getproductiv shows you only **one task at a time**. Complete
 - **Task queue** — View and manage upcoming tasks in the sidebar
 - **Delete tasks** — Remove any queued task you no longer need
 - **Keyboard shortcuts** — Work faster without touching your mouse
+- **Mini window (PiP)** — Pop out your current task to a floating window (desktop Chrome)
 - **PWA** — Install on mobile or desktop, works offline
 
 ## Keyboard Shortcuts
