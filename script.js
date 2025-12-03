@@ -315,66 +315,68 @@ async function openPip() {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                height: 100vh;
+                height: 60vh;
                 padding: 20px;
             }
-            .pip-content {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-            .pip-task {
-                font-size: 1.25rem;
-                font-weight: 600;
-                line-height: 1.4;
-                color: #f0f0f0;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-            }
-            .pip-empty {
-                text-align: center;
-            }
-            .pip-empty-icon {
-                font-size: 2.5rem;
-                margin-bottom: 8px;
-            }
-            .pip-empty-text {
-                color: #888;
-                font-size: 0.9rem;
-            }
-            .pip-footer {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-top: 16px;
-            }
-            .pip-queue {
-                font-size: 0.8rem;
-                color: #666;
-            }
-            .pip-btn {
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                border: none;
-                background: #197278;
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.15s ease;
-            }
-            .pip-btn:hover { 
-                background: #1a8a91;
-                transform: scale(1.05); 
-            }
-            .pip-btn:active { transform: scale(0.95); }
-            .pip-btn svg { width: 24px; height: 24px; }
+        .pip-window {
+            width: 250px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .pip-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .pip-task {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f0f0f0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-clamp: 2;
+        }
+
+        .pip-empty-text {
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .pip-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pip-queue {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .pip-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #197278;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pip-btn:hover {
+            background: #1a8a91;
+        }
         `
         pipWindow.document.head.appendChild(style)
 
@@ -406,10 +408,7 @@ function renderPipContent() {
     if (!taskText) {
         container.innerHTML = `
             <div class="pip-content">
-                <div class="pip-empty">
-                    <div class="pip-empty-icon">✨</div>
                     <div class="pip-empty-text">All clear! Add a task to get started.</div>
-                </div>
             </div>
         `
     } else {
@@ -420,9 +419,9 @@ function renderPipContent() {
             <div class="pip-footer">
                 <span class="pip-queue">${queueStatus}</span>
                 <button class="pip-btn" id="pip-complete" aria-label="Complete task">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 13l4 4L19 7"/>
-                    </svg>
+                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#dfd7d7ff" fill="none" stroke="#dfd7d7ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 14.5C5 14.5 6.5 14.5 8.5 18C8.5 18 14.0588 8.83333 19 7" />
+        </svg>
                 </button>
             </div>
         `
