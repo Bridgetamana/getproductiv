@@ -56,19 +56,5 @@
     "categories": [
         "productivity",
         "utilities"
-    ],
-    "screenshots": [
-        {
-            "src": "../image/mobile-screenshot.png",
-            "type": "image/png",
-            "sizes": "595x554",
-            "form_factor": "narrow"
-        },
-        {
-            "src": "../image/desktop-screenshot.png",
-            "type": "image/png",
-            "sizes": "319x556",
-            "form_factor": "wide"
-        }
     ]
 }

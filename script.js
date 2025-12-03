@@ -310,8 +310,8 @@ async function openPip() {
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body {
                 font-family: "Open Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-                background: #121212;
-                color: #f0f0f0;
+                background: #ffffff;
+                color: #1a1a1a;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -338,7 +338,7 @@ async function openPip() {
         .pip-task {
             font-size: 1rem;
             font-weight: 600;
-            color: #f0f0f0;
+            color: #1a1a1a;
             overflow: hidden;
             text-overflow: ellipsis;
             line-clamp: 2;
@@ -346,7 +346,7 @@ async function openPip() {
 
         .pip-empty-text {
             text-align: center;
-            color: #888;
+            color: #6b6b6b;
             font-size: 0.9rem;
         }
 
@@ -358,7 +358,7 @@ async function openPip() {
 
         .pip-queue {
             font-size: 0.75rem;
-            color: #666;
+            color: #6b6b6b;
         }
 
         .pip-btn {
