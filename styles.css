@@ -598,108 +598,41 @@ kbd {
   border-radius: var(--radius-sm);
 }
 
-.focus-timer {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-xl);
-  padding: var(--spacing-sm) var(--spacing-md);
-}
-
-.timer-display {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.timer-input {
-  width: 2.5ch;
-  padding: 0;
-  font-size: 1.75rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  font-family: inherit;
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  text-align: center;
-  -moz-appearance: textfield;
-  appearance: textfield;
-  transition: all 0.2s ease;
-}
-
-.timer-input::-webkit-outer-spin-button,
-.timer-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.timer-input:focus {
-  outline: none;
-  color: var(--text);
-  border-bottom-color: var(--accent-color);
-}
-
-.timer-input:hover:not(:focus) {
-  border-bottom-color: var(--border-color);
-}
-
-.timer-separator {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin: 0 -2px;
-}
-
-.timer-display.running .timer-input,
-.timer-display.running .timer-separator {
-  color: var(--accent-color);
-}
-
-.timer-display.running .timer-input {
-  pointer-events: none;
-  border-bottom-color: transparent;
-}
-
-.timer-controls {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.timer-btn {
+.pip-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-full);
-  background-color: var(--accent-color);
-  color: white;
+  background-color: var(--background-secondary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
   cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition: all 0.2s ease;
+  z-index: 10;
 }
 
-.timer-btn:hover {
+.pip-btn:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
   transform: scale(1.05);
-  opacity: 0.9;
 }
 
-.timer-btn:focus-visible {
+.pip-btn:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
-.timer-btn-secondary {
-  width: 32px;
-  height: 32px;
-  background-color: transparent;
-  color: var(--text-muted);
-  border: 1px solid var(--border-color);
+@media (hover: none) and (pointer: coarse) {
+  .pip-btn {
+    display: none;
+  }
 }
 
-.timer-btn-secondary:hover {
-  color: var(--text);
-  border-color: var(--text-muted);
+.pip-btn.hidden {
+  display: none;
 }

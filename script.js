@@ -15,26 +15,15 @@ const noQueuedTask = document.getElementById("no-queued-task")
 const queueWrapper = document.querySelector(".queue-wrapper")
 const queuedTasksCount = document.getElementById("queued-tasks-count")
 const toast = document.getElementById("toast")
-const timerDisplay = document.getElementById("timer-display")
-const timerMinutesInput = document.getElementById("timer-minutes")
-const timerSecondsInput = document.getElementById("timer-seconds")
-const timerStartBtn = document.getElementById("timer-start")
-const timerPauseBtn = document.getElementById("timer-pause")
-const timerResetBtn = document.getElementById("timer-reset")
-let timerInterval = null
-let timerRunning = false
-let timerSecondsLeft = 25 * 60
-let savedMinutes = 25
-let savedSeconds = 0
+const pipBtn = document.getElementById("pip-btn")
+let pipWindow = null
 
-// Audio context for mobile compatibility - created once and reused
 let audioContext = null
 
 function getAudioContext() {
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)()
     }
-    // Resume if suspended (required for mobile browsers)
     if (audioContext.state === 'suspended') {
         audioContext.resume()
     }
@@ -138,6 +127,7 @@ function displayTask() {
         taskArray.shift()
         displayTask()
         saveTask(taskArray)
+        playCompletionSound()
     })
 
     const queuedTasks = taskArray.slice(1)
@@ -169,6 +159,10 @@ function displayTask() {
                 deleteQueuedTask(index)
             })
         })
+    }
+
+    if (pipWindow) {
+        renderPipContent()
     }
 }
 
@@ -223,6 +217,7 @@ function completeCurrentTask() {
         taskArray.shift()
         displayTask()
         saveTask(taskArray)
+        playCompletionSound()
     }
 }
 
@@ -275,147 +270,209 @@ document.addEventListener("keydown", (e) => {
             openInfoBtn.style.display = "none"
         }
     }
-
-    // P - Toggle timer (start/pause)
-    if (e.key === "p" || e.key === "P") {
-        e.preventDefault()
-        toggleTimer()
-    }
 })
 
-function getTimerValues() {
-    const mins = parseInt(timerMinutesInput.value) || 0
-    const secs = parseInt(timerSecondsInput.value) || 0
-    return { mins, secs }
+function isPipSupported() {
+    return "documentPictureInPicture" in window
 }
 
-function updateTimerDisplay() {
-    const minutes = Math.floor(timerSecondsLeft / 60)
-    const seconds = timerSecondsLeft % 60
-    timerMinutesInput.value = minutes.toString().padStart(2, "0")
-    timerSecondsInput.value = seconds.toString().padStart(2, "0")
-    if (timerRunning) {
-        document.title = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} - Getproductiv`
+if (!isPipSupported()) {
+    pipBtn.classList.add("hidden")
+}
+
+function getCurrentTaskText() {
+    if (taskArray.length === 0) {
+        return null
     }
+    return taskArray[0].text
 }
 
-function startTimer() {
-    if (timerRunning) return
-    const { mins, secs } = getTimerValues()
-    savedMinutes = mins
-    savedSeconds = secs
-    timerSecondsLeft = (mins * 60) + secs
+function getQueueStatus() {
+    const remaining = taskArray.length - 1
+    if (remaining <= 0) return ""
+    return remaining === 1 ? "1 more" : `${remaining} more`
+}
 
-    if (timerSecondsLeft <= 0) {
-        showToast("Set a time first")
+async function openPip() {
+    if (!("documentPictureInPicture" in window)) {
+        showToast("Mini window not available")
         return
     }
 
-    timerRunning = true
-    timerStartBtn.style.display = "none"
-    timerPauseBtn.style.display = "flex"
-    timerDisplay.classList.add("running")
+    try {
+        pipWindow = await documentPictureInPicture.requestWindow({
+            width: 340,
+            height: 160
+        })
 
-    timerInterval = setInterval(() => {
-        timerSecondsLeft--
-        updateTimerDisplay()
+        const style = pipWindow.document.createElement("style")
+        style.textContent = `
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                font-family: "Open Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+                background: #121212;
+                color: #f0f0f0;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100vh;
+                padding: 20px;
+            }
+            .pip-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .pip-task {
+                font-size: 1.25rem;
+                font-weight: 600;
+                line-height: 1.4;
+                color: #f0f0f0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+            .pip-empty {
+                text-align: center;
+            }
+            .pip-empty-icon {
+                font-size: 2.5rem;
+                margin-bottom: 8px;
+            }
+            .pip-empty-text {
+                color: #888;
+                font-size: 0.9rem;
+            }
+            .pip-footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 16px;
+            }
+            .pip-queue {
+                font-size: 0.8rem;
+                color: #666;
+            }
+            .pip-btn {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                border: none;
+                background: #197278;
+                color: white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.15s ease;
+            }
+            .pip-btn:hover { 
+                background: #1a8a91;
+                transform: scale(1.05); 
+            }
+            .pip-btn:active { transform: scale(0.95); }
+            .pip-btn svg { width: 24px; height: 24px; }
+        `
+        pipWindow.document.head.appendChild(style)
 
-        if (timerSecondsLeft <= 0) {
-            timerComplete()
-        }
-    }, 1000)
-}
+        const container = pipWindow.document.createElement("div")
+        container.id = "pip-container"
+        pipWindow.document.body.appendChild(container)
 
-function pauseTimer() {
-    timerRunning = false
-    timerStartBtn.style.display = "flex"
-    timerPauseBtn.style.display = "none"
-    timerDisplay.classList.remove("running")
+        renderPipContent()
 
-    if (timerInterval) {
-        clearInterval(timerInterval)
-        timerInterval = null
+        pipWindow.addEventListener("pagehide", () => {
+            pipWindow = null
+        })
+
+    } catch (e) {
+        console.log("PiP failed:", e)
+        showToast("Could not open mini window")
     }
-
-    document.title = "Getproductiv - Focus on one task at a time"
 }
 
-function resetTimer() {
-    pauseTimer()
-    timerSecondsLeft = (savedMinutes * 60) + savedSeconds
-    updateTimerDisplay()
-}
+function renderPipContent() {
+    if (!pipWindow) return
 
-function toggleTimer() {
-    if (timerRunning) {
-        pauseTimer()
+    const container = pipWindow.document.getElementById("pip-container")
+    if (!container) return
+
+    const taskText = getCurrentTaskText()
+    const queueStatus = getQueueStatus()
+
+    if (!taskText) {
+        container.innerHTML = `
+            <div class="pip-content">
+                <div class="pip-empty">
+                    <div class="pip-empty-icon">✨</div>
+                    <div class="pip-empty-text">All clear! Add a task to get started.</div>
+                </div>
+            </div>
+        `
     } else {
-        startTimer()
-    }
-}
+        container.innerHTML = `
+            <div class="pip-content">
+                <div class="pip-task">${escapeHtml(taskText)}</div>
+            </div>
+            <div class="pip-footer">
+                <span class="pip-queue">${queueStatus}</span>
+                <button class="pip-btn" id="pip-complete" aria-label="Complete task">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 13l4 4L19 7"/>
+                    </svg>
+                </button>
+            </div>
+        `
 
-function timerComplete() {
-    pauseTimer()
-    playTimerSound()
-    if (Notification.permission === "granted") {
-        new Notification("Getproductiv", {
-            body: "Time's up!",
-            icon: "./assets/icons/android-chrome-192x192.png"
+        pipWindow.document.getElementById("pip-complete").addEventListener("click", () => {
+            completeCurrentTask()
+            playCompletionSound()
+            renderPipContent()
         })
     }
-
-    showToast("Time's up!")
 }
 
-function playTimerSound() {
+function escapeHtml(text) {
+    const div = document.createElement("div")
+    div.textContent = text
+    return div.innerHTML
+}
+
+function closePip() {
+    if (pipWindow) {
+        pipWindow.close()
+        pipWindow = null
+    }
+}
+
+function playCompletionSound() {
     try {
         const ctx = getAudioContext()
-        const frequencies = [523.25, 659.25, 783.99, 1046.50]
-        frequencies.forEach((freq, i) => {
-            const oscillator = ctx.createOscillator()
-            const gainNode = ctx.createGain()
+        const oscillator = ctx.createOscillator()
+        const gainNode = ctx.createGain()
 
-            oscillator.connect(gainNode)
-            gainNode.connect(ctx.destination)
+        oscillator.connect(gainNode)
+        gainNode.connect(ctx.destination)
 
-            oscillator.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.15)
-            oscillator.type = "sine"
+        oscillator.frequency.setValueAtTime(880, ctx.currentTime)
+        oscillator.type = "sine"
 
-            gainNode.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.15)
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.15 + 0.5)
+        gainNode.gain.setValueAtTime(0.3, ctx.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3)
 
-            oscillator.start(ctx.currentTime + i * 0.15)
-            oscillator.stop(ctx.currentTime + i * 0.15 + 0.5)
-        })
+        oscillator.start(ctx.currentTime)
+        oscillator.stop(ctx.currentTime + 0.3)
     } catch (e) {
-        console.log("Audio not available:", e)
     }
 }
 
-timerStartBtn.addEventListener("click", startTimer)
-timerPauseBtn.addEventListener("click", pauseTimer)
-timerResetBtn.addEventListener("click", resetTimer)
-
-timerMinutesInput.addEventListener("change", () => {
-    let val = parseInt(timerMinutesInput.value) || 0
-    val = Math.max(0, Math.min(99, val))
-    timerMinutesInput.value = val.toString().padStart(2, "0")
-    timerSecondsLeft = (val * 60) + (parseInt(timerSecondsInput.value) || 0)
-})
-
-timerSecondsInput.addEventListener("change", () => {
-    let val = parseInt(timerSecondsInput.value) || 0
-    val = Math.max(0, Math.min(59, val))
-    timerSecondsInput.value = val.toString().padStart(2, "0")
-    timerSecondsLeft = ((parseInt(timerMinutesInput.value) || 0) * 60) + val
-})
-
-timerMinutesInput.addEventListener("focus", () => timerMinutesInput.select())
-timerSecondsInput.addEventListener("focus", () => timerSecondsInput.select())
+pipBtn.addEventListener("click", openPip)
 
 document.addEventListener("click", () => {
     if (Notification.permission === "default") {
         Notification.requestPermission()
     }
 }, { once: true })
-updateTimerDisplay()
