@@ -315,7 +315,7 @@ async function openPip() {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                height: 60vh;
+                height: 100%;
                 padding: 20px;
             }
         .pip-window {
@@ -391,7 +391,6 @@ async function openPip() {
         })
 
     } catch (e) {
-        console.log("PiP failed:", e)
         showToast("Could not open mini window")
     }
 }
@@ -428,7 +427,6 @@ function renderPipContent() {
 
         pipWindow.document.getElementById("pip-complete").addEventListener("click", () => {
             completeCurrentTask()
-            playCompletionSound()
             renderPipContent()
         })
     }

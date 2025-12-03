@@ -47,16 +47,12 @@
     color: var(--text);
     font-size: var(--font-base);
     line-height: 1.5;
-    height: 100vh;
-    height: -webkit-fill-available;
-    height: 100dvh;
     min-height: 100vh;
-    min-height: -webkit-fill-available;
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
     padding: var(--spacing-xl) var(--spacing-md);
-    font-family: "OpenSans", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 
